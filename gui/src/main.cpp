@@ -1,22 +1,12 @@
-#include <iostream>
-#include <stdio.h>
-//#include "../lib/getopt_pp/getopt_pp.h"
+#include <QApplication>
+#include <QPushButton>
 
-//using namespace GetOpt;
-
-int main()
+int main(int argc, char **argv)
 {
-    
-    // std::cout << "Good";
+    QApplication app (argc, argv);
 
-    // GetOpt::GetOpt_pp ops(argc, argv);
+    QPushButton button ("Hello world !");
+    button.show();
 
-    // ops >> Option('n', "name", who, "world" );      /* the default name is 'world' */
-
-    // cout << "Hello " << who << "!" << endl;
-
-
-    std::cout << "Good";
-    getchar();
-    return 0;
+    return app.exec();
 }
