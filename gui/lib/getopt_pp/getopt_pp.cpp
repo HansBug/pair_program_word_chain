@@ -28,7 +28,7 @@ GetOpt_pp: Yet another C++ version of getopt.
 #include <unistd.h>
 #endif
 
-#include "getoptpp/getopt_pp.h"
+#include "getopt_pp.h"
 
 namespace GetOpt
 {
@@ -218,7 +218,7 @@ GETOPT_INLINE GetOpt_pp::GetOpt_pp(int argc, const char* const* const argv, _Env
     _parse_env();
 }
 
-GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (const _Option& opt) throw(GetOptEx)
+GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (const _Option& opt) /*throw(GetOptEx)*/
 {
     if (_last != _Option::ParsingError)
     {

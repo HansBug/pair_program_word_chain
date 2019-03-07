@@ -17,13 +17,12 @@
 
 ## Compile
 
-**Using Cmake on Windows**
+
+**Build wordlist command line program**
 
 Environment:
 * Windows 10
 * Requires: mingw32-make, cmake, g++
-
-Let's take wordlist project as an example.
 
 In the `wordlist` folder, open a terminal, then enter the commands below:
 
@@ -36,6 +35,14 @@ mingw32-make
 ```
 
 If successful, you can get a `worldlist.exe` executable file in the `build/` folder.
+
+
+**Build QT GUI program**
+
+In the `gui` folder, open a terminal, then enter the commands below:
+
+```cmd
+```
 
 ## Libraries We Use
 
