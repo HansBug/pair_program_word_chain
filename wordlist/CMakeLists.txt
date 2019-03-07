@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 
-project (Wordlist)
+project (wordlist)
 
 # 查找目录下的所有源文件
 # 并将名称保存到 DIR_SRCS 变量

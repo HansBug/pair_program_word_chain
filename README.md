@@ -7,21 +7,27 @@
 ├─BIN       # Final Result 1: binary files
 ├─GUIBIN    # Final Result 2: GUI excutable file
 ├─core      # Project 1: Core library
-├─cmd       # Project 2: Command line program
+├─wordlist  # Project 2: Command line program
 │  ├─lib        # libraries
-│  ├─src        # sources
+│  └─src        # source codes
 ├─gui       # Project 3: GUI program
 │  ├─lib        # libraries
-│  └─src        # sources
+│  └─src        # source codes
 ```
 
 ## Compile
 
 **Using Cmake on Windows**
 
-In the project root folder:
+Environment:
+* Windows 10
+* Requires: mingw32-make, cmake, g++
 
-```bash
+Let's take wordlist project as an example.
+
+In the `wordlist` folder, open a terminal, then enter the commands below:
+
+```cmd
 # generate Makefile using `cmake`
 mkdir build && cd build
 cmake .. -G "MinGW Makefiles"
@@ -29,6 +35,7 @@ cmake .. -G "MinGW Makefiles"
 mingw32-make
 ```
 
+If successful, you can get a `worldlist.exe` executable file in the `build/` folder.
 
 ## Libraries We Use
 
