@@ -4,9 +4,11 @@ Giving a list of englist words, find out the longest word chain.
 
 For more detailed infomation, see [结对项目-最长单词链](https://edu.cnblogs.com/campus/buaa/BUAA_SE_2019_LJ/homework/2638).
 
-Similar posts: 
+Related posts: 
 * [stackoverflow - Longest word chain from a list of words](https://stackoverflow.com/questions/53485052/)
-* [Last letter-first letter](https://rosettacode.org/wiki/Last_letter-first_letter)
+* [Talk:Last letter-first letter](https://rosettacode.org/wiki/Talk:Last_letter-first_letter)
+* [Solutions - Last letter-first letter](https://rosettacode.org/wiki/Last_letter-first_letter)
+* [Github Gist - C++ solution](https://gist.github.com/authuir/9f8ec4b907264a9922fc0b3ff5b41749)
 
 ## Project Structure
 
@@ -59,6 +61,8 @@ cmake .. -G "MinGW Makefiles"
 mingw32-make
 ```
 If successful, you can get a `GUIApp.exe` executable file in the `build/` folder.
+
+![screenshot of GUI](http://ww1.sinaimg.cn/large/0070O95Yly1g0vpet5amjj30mw0gogmg.jpg)
 
 ## Libraries We Use
 
