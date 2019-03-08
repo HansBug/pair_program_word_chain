@@ -62,7 +62,9 @@ mingw32-make
 ```
 If successful, you can get a `GUIApp.exe` executable file in the `build/` folder.
 
-![screenshot of GUI](http://ww1.sinaimg.cn/large/0070O95Yly1g0vpet5amjj30mw0gogmg.jpg)
+This is what our app looks like:
+
+<img title="GUI App" src="(http://ww1.sinaimg.cn/large/0070O95Yly1g0vpet5amjj30mw0gogmg.jpg" width="500">
 
 ## Libraries We Use
 
