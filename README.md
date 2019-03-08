@@ -1,6 +1,6 @@
 # Longest Word Chain
 
-Giving a list of englist words, find out the longest word chain.
+Giving a list of english words, find out the longest word chain.
 
 For more detailed infomation, see [结对项目-最长单词链](https://edu.cnblogs.com/campus/buaa/BUAA_SE_2019_LJ/homework/2638).
 
@@ -15,19 +15,19 @@ Related posts:
 ```
 ├─BIN       # Final Result 1: binary files
 ├─GUIBIN    # Final Result 2: GUI excutable file
-├─core      # Project 1: Core library
-├─wordlist  # Project 2: Command line program
+├─core      # Project 1: Core dll library
+├─wordlist  # Project 2: Command line App
 │  ├─lib        # libraries
 │  └─src        # source codes
-├─gui       # Project 3: GUI program
-│  ├─lib        # libraries
-│  └─src        # source codes
+└─gui       # Project 3: GUI App
+   ├─lib        # libraries
+   └─src        # source codes
 ```
 
 ## Compile & Run
 
 
-**Build Wordlist command line app**
+**Build Wordlist command line App**
 
 Environment:
 * Windows 10
@@ -49,7 +49,7 @@ mingw32-make
 If successful, you can get a `worldlist.exe` executable file in the `build/` folder.
 
 
-**Build Wordlist QT GUI app**
+**Build Wordlist QT GUI App**
 
 In the `gui` folder, open a terminal, then enter the commands below:
 
