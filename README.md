@@ -24,6 +24,9 @@ Environment:
 * Windows 10
 * Requires: mingw32-make, cmake, g++
 
+> 关于环境变量的配置，可以看[这篇文章](https://www.cnblogs.com/fondoger/p/using-qt5-on-windows-without-qtcreator-or-visual-studio.html)，你只需要完成配置环境变量这一小节就好了。
+> PS：cmake需要自己另外安装
+
 In the `wordlist` folder, open a terminal, then enter the commands below:
 
 ```cmd
