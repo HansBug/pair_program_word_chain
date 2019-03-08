@@ -27,7 +27,7 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 # 链接QT 动态链接库
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
-# 添加 getopt_pp 子目录
-add_subdirectory(lib/getopt_pp)
-# 链接模块
-target_link_libraries( ${PROJECT_NAME} getopt_pp)
+# # 添加 getopt_pp 子目录
+# add_subdirectory(lib/getopt_pp)
+# # 链接模块
+# target_link_libraries( ${PROJECT_NAME} getopt_pp)

@@ -42,9 +42,19 @@ If successful, you can get a `worldlist.exe` executable file in the `build/` fol
 In the `gui` folder, open a terminal, then enter the commands below:
 
 ```cmd
+# generate Makefile using `cmake`
+mkdir build && cd build
+cmake .. -G "MinGW Makefiles"
+# build project with mingw32-make
+mingw32-make
 ```
+If successful, you can get a `GUIApp.exe` executable file in the `build/` folder.
 
 ## Libraries We Use
 
 * [getoptpp](https://code.google.com/archive/p/getoptpp/wikis/Help.wiki) - A getopt C++ version for handling parameters
 
+
+## TODOS
+
+* 检查是否存在能打开文件，而不能访问文件内容的情况？
