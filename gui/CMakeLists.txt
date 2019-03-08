@@ -23,7 +23,7 @@ add_executable(${PROJECT_NAME} ${DIR_SRCS})
 
 
 # 查找QTWidgets库
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt5Widgets REQUIRED)
 # 链接QT 动态链接库
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
