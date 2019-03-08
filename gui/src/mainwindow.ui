@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>822</width>
-    <height>561</height>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -590,7 +590,7 @@ tyrogue vigoroth vulpix wailord wartortle whismur wingull yamask</string>
        </font>
       </property>
       <property name="readOnly">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="plainText">
        <string/>
