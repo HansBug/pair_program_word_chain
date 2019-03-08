@@ -1,7 +1,14 @@
-# pair_program_word_link
+# Longest Word Chain
 
+Giving a list of englist words, find out the longest word chain.
 
-## Project structure
+For more detailed infomation, see [结对项目-最长单词链](https://edu.cnblogs.com/campus/buaa/BUAA_SE_2019_LJ/homework/2638).
+
+Similar posts: 
+* [stackoverflow - Longest word chain from a list of words](https://stackoverflow.com/questions/53485052/)
+* [Last letter-first letter](https://rosettacode.org/wiki/Last_letter-first_letter)
+
+## Project Structure
 
 ```
 ├─BIN       # Final Result 1: binary files
@@ -15,10 +22,10 @@
 │  └─src        # source codes
 ```
 
-## Compile
+## Compile & Run
 
 
-**Build wordlist command line program**
+**Build Wordlist command line app**
 
 Environment:
 * Windows 10
@@ -40,7 +47,7 @@ mingw32-make
 If successful, you can get a `worldlist.exe` executable file in the `build/` folder.
 
 
-**Build QT GUI program**
+**Build Wordlist QT GUI app**
 
 In the `gui` folder, open a terminal, then enter the commands below:
 
@@ -56,8 +63,3 @@ If successful, you can get a `GUIApp.exe` executable file in the `build/` folder
 ## Libraries We Use
 
 * [getoptpp](https://code.google.com/archive/p/getoptpp/wikis/Help.wiki) - A getopt C++ version for handling parameters
-
-
-## TODOS
-
-* 检查是否存在能打开文件，而不能访问文件内容的情况？
