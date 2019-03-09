@@ -1,6 +1,11 @@
 cmake_minimum_required (VERSION 2.8)
 
-project (CORE_LIB)
+project (CORE)
 
-include_directories(./)
+# include_directories(./) 可以指定.h头文件目录
 add_library(${PROJECT_NAME} SHARED core.cpp)
+
+
+# 自定义输出dll的名称
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Core")

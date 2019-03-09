@@ -29,8 +29,22 @@ target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 
 # 添加Core核心计算库
-find_library(CORE_LIB NAME libCORE_LIB PATHS ../core/build/)
+find_library(CORE_LIB NAME Core.dll PATHS ../core/build/)
 # 链接动态链接库
 target_link_libraries( ${PROJECT_NAME} ${CORE_LIB})
-# 将找到的DLL复制一份到与可执行文件相同的路径中
-file(COPY ${CORE_LIB} DESTINATION ${CMAKE_BINARY_DIR})
+
+# 自动复制dll文件, https://stackoverflow.com/questions/10671916/how-to-copy-dll-files-into-the-same-folder-as-the-executable-using-cmake?rq=1
+# 将相对路径（相对CMakeLists.txt）转换成绝对路径，
+get_filename_component(absolute_path_of_build_dir "./build" REALPATH )
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+               COMMAND ${CMAKE_COMMAND} -E copy_if_different
+               ${CORE_LIB} ${absolute_path_of_build_dir})
+
+# 自动将生成的可执行文件和DLL复制一份到GUIBIN中
+get_filename_component(absolute_path_of_GUIBIN "../GUIBIN/" REALPATH)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                  $<TARGET_FILE:${PROJECT_NAME}> ${absolute_path_of_GUIBIN})
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                  ${CORE_LIB} ${absolute_path_of_GUIBIN})

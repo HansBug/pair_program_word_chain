@@ -52,5 +52,5 @@ void CalcThread::run()
     // }
     
     this->msleep(5000);
-    emit calcFinished(output);
+    emit calcFinished(QString("Processed output:") + this->words);
 }

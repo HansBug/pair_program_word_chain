@@ -26,15 +26,30 @@ Related posts:
 
 ## Compile & Run
 
-
-**Build Wordlist command line App**
-
 Environment:
 * Windows 10
-* Requires: mingw32-make, cmake, g++
+* Requires: `cmake`, MinGW(with `migw32-make` and `gcc`)
+* (PS: `ming32-make` is same as `make`)
 
-> 关于环境变量的配置，可以看[这篇文章](https://www.cnblogs.com/fondoger/p/using-qt5-on-windows-without-qtcreator-or-visual-studio.html)，你只需要完成配置环境变量这一小节就好了。
-> (PS：cmake需要自己另外安装)
+> Don't know how to configure the environment ? You can have a look at [this article](https://www.cnblogs.com/fondoger/p/using-qt5-on-windows-without-qtcreator-or-visual-studio.html)。
+>
+> PS: you still need to install `cmake` manually(and don't forget to put `cmake` into your path environment).
+
+## 1. Build Core Dynamic Linking Library
+
+In the `core` folder, open a terminal, then enter the commands below:
+
+```cmd
+# generate Makefile using `cmake`
+mkdir build && cd build
+cmake .. -G "MinGW Makefiles"
+# build project with mingw32-make
+mingw32-make
+```
+
+If successful, you can get a `libCore_LIB.dll` DLL file in the `build/` folder.
+
+## 2. Build Wordlist command line App
 
 In the `wordlist` folder, open a terminal, then enter the commands below:
 
@@ -49,7 +64,8 @@ mingw32-make
 If successful, you can get a `worldlist.exe` executable file in the `build/` folder.
 
 
-**Build Wordlist QT GUI App**
+
+## 3. Build Wordlist QT GUI App
 
 In the `gui` folder, open a terminal, then enter the commands below:
 
@@ -64,7 +80,8 @@ If successful, you can get a `GUIApp.exe` executable file in the `build/` folder
 
 This is what our app looks like:
 
-<img title="GUI App" src="http://ww1.sinaimg.cn/large/0070O95Yly1g0vpet5amjj30mw0gogmg.jpg" width="500">
+<img title="GUI App" src="http://ww1.sinaimg.cn/large/0070O95Yly1g0x2fibasdj30mw0h9dgx.jpg" width="500">
+
 
 ## Libraries We Use
 
