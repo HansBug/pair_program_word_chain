@@ -5,10 +5,10 @@ Giving a list of english words, find out the longest word chain.
 For more detailed infomation, see [结对项目-最长单词链](https://edu.cnblogs.com/campus/buaa/BUAA_SE_2019_LJ/homework/2638).
 
 Related posts: 
-* [stackoverflow - Longest word chain from a list of words](https://stackoverflow.com/questions/53485052/)
+* [StackOverflow - Longest word chain from a list of words](https://stackoverflow.com/questions/53485052/)
 * [Talk:Last letter-first letter](https://rosettacode.org/wiki/Talk:Last_letter-first_letter)
-* [Solutions - Last letter-first letter](https://rosettacode.org/wiki/Last_letter-first_letter)
-* [Github Gist - C++ solution](https://gist.github.com/authuir/9f8ec4b907264a9922fc0b3ff5b41749)
+* [Last letter-first letter 40+ Solutions](https://rosettacode.org/wiki/Last_letter-first_letter)
+* [Github Gist - C++ solution for longest word chain](https://gist.github.com/authuir/9f8ec4b907264a9922fc0b3ff5b41749)
 
 ## Project Structure
 
@@ -29,9 +29,9 @@ Related posts:
 Environment:
 * Windows 10
 * Requires: `cmake`, MinGW(with `migw32-make` and `gcc`)
-* (PS: `ming32-make` is same as `make`)
+   (PS: `ming32-make` is same as `make`)
 
-> Don't know how to configure the environment ? You can have a look at [this article](https://www.cnblogs.com/fondoger/p/using-qt5-on-windows-without-qtcreator-or-visual-studio.html)。
+> Don't know how to configure the environment ? You can have a look at [this article](https://www.cnblogs.com/fondoger/p/using-qt5-on-windows-without-qtcreator-or-visual-studio.html)
 >
 > PS: you still need to install `cmake` manually(and don't forget to put `cmake` into your path environment).
 
