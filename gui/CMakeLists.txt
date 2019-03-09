@@ -27,7 +27,10 @@ find_package(Qt5Widgets REQUIRED)
 # 链接QT 动态链接库
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
-# # 添加 getopt_pp 子目录
-# add_subdirectory(lib/getopt_pp)
-# # 链接模块
-# target_link_libraries( ${PROJECT_NAME} getopt_pp)
+
+# 添加Core核心计算库
+find_library(CORE_LIB NAME libCORE_LIB PATHS ../core/build/)
+# 链接动态链接库
+target_link_libraries( ${PROJECT_NAME} ${CORE_LIB})
+# 将找到的DLL复制一份到与可执行文件相同的路径中
+file(COPY ${CORE_LIB} DESTINATION ${CMAKE_BINARY_DIR})

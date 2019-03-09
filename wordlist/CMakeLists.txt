@@ -15,3 +15,30 @@ add_executable(${PROJECT_NAME} ${DIR_SRCS})
 add_subdirectory(lib/getopt_pp)
 target_link_libraries( ${PROJECT_NAME} getopt_pp)
 
+# 关于动态链接库的东东
+# https://stackoverflow.com/questions/37282838/do-i-need-to-distribute-a-header-file-and-a-lib-file-with-a-dll
+# https://stackoverflow.com/questions/45912651/how-to-specify-where-to-find-a-shared-library-using-cmake
+#
+# https://docs.microsoft.com/en-us/windows/desktop/dlls/creating-a-simple-dynamic-link-library
+# https://docs.microsoft.com/en-us/windows/desktop/dlls/using-load-time-dynamic-linking
+# https://docs.microsoft.com/en-us/windows/desktop/dlls/using-run-time-dynamic-linking
+# https://docs.microsoft.com/en-us/cpp/build/exporting-from-a-dll-using-declspec-dllexport?view=vs-2017
+# 为什么使用dllimport https://stackoverflow.com/questions/57999/what-is-the-difference-between-dllexport-and-dllimport
+#
+# 提示找不到DLL, https://stackoverflow.com/questions/44909846/cmake-exe-cant-find-dll
+
+# 添加共享dll库，将找到的结果存入CORE_LIB变量中
+find_library(CORE_LIB NAME libCORE_LIB PATHS ../core/build/)
+# 链接动态链接库
+target_link_libraries( ${PROJECT_NAME} ${CORE_LIB})
+# 将找到的DLL复制一份到与可执行文件相同的路径中
+file(COPY ${CORE_LIB} DESTINATION ${CMAKE_BINARY_DIR})
+# CMAKE常见变量 https://www.cnblogs.com/xianghang123/p/3556425.html
+
+# 修改CMAKE输出目录：https://stackoverflow.com/questions/543203/cmake-runtime-output-directory-on-windows
+# SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+# SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+# SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+# SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+# SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+# SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
