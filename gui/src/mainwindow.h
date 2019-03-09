@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow
     void on_loadButton_clicked();
     void on_calcButton_clicked();
     void on_saveButton_clicked();
+    void on_clearButton_clicked();
     void on_inputTextEdit_textChanged();
 
   private:

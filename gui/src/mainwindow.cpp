@@ -50,6 +50,11 @@ void MainWindow::on_loadButton_clicked()
 
 void MainWindow::on_calcButton_clicked()
 {
+    if (calcThread->isRunning()) {
+        QMessageBox::information(this, NULL, "计算正在进行中，请等待计算完成");
+        return;
+    }
+
     // here is all the parameters
     bool flag_w = ui->flag_w->isChecked();
     bool flag_c = ui->flag_c->isChecked();
@@ -59,18 +64,28 @@ void MainWindow::on_calcButton_clicked()
 
     // Maybe you can comment below codes
     std::stringstream ss;
-    ss << "flag_w:" << flag_w << " flag_c:" << flag_c 
+    ss << "参数：\n"
+        << "flag_w:" << flag_w << " flag_c:" << flag_c 
         << " flag_h:" << flag_h << " flag_t:" << flag_t
-        << " flag_r:" << flag_r;
+        << " flag_r:" << flag_r << std::endl << std::endl
+        << "点击Ok开始计算";
     QString str = QString::fromStdString(ss.str());
-    QMessageBox::information(this, NULL, str);
+    QMessageBox::information(this, "参数确认", str);
     
 
     calcThread->setFlags(flag_w, flag_c, flag_h, flag_t, flag_r);
     calcThread->setWords(ui->inputTextEdit->toPlainText());
     calcThread->start();
 
-    statusBarLabel->setText("正在计算...");
+    statusBarLabel->setText("正在计算... ...");
+    ui->calcButton->setText("(●'◡'●)");
+}
+
+void MainWindow::on_clearButton_clicked()
+{
+    ui->resultTextEdit->clear();
+    statusBar()->showMessage("结果已清空", 2000);
+    statusBarLabel->setText("准备就绪");
 }
 
 void MainWindow::on_saveButton_clicked()
@@ -101,4 +116,5 @@ void MainWindow::onCalcFinished(const QString &result)
 {
     ui->resultTextEdit->setPlainText(result);
     statusBarLabel->setText("计算完毕, 耗时5s");
+    ui->calcButton->setText("开始计算");
 }

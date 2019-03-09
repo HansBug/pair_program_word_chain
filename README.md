@@ -69,3 +69,7 @@ This is what our app looks like:
 ## Libraries We Use
 
 * [getoptpp](https://code.google.com/archive/p/getoptpp/wikis/Help.wiki) - A getopt C++ version for handling parameters
+
+## TODO:
+
+* Disable `assert` in release version
