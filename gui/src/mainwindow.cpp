@@ -99,6 +99,7 @@ void MainWindow::on_saveButton_clicked()
     QFile qFile(filename);
     if (!qFile.open(QIODevice::WriteOnly)) {
         QMessageBox::warning(this, "文件打开失败", "你选择的文件拒绝访问");
+        return;
     }
     QTextStream stream(&qFile); 
     stream << ui->resultTextEdit->toPlainText();
