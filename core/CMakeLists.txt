@@ -1,11 +1,18 @@
 cmake_minimum_required (VERSION 2.8)
 
-project (CORE)
+project (core)
 
-# include_directories(./) 可以指定.h头文件目录
-add_library(${PROJECT_NAME} SHARED core.cpp)
+# 查找目录下的所有源文件
+# 并将名称保存到 DIR_SRCS 变量
+aux_source_directory(./src DIR_SRCS)
 
 
-# 自定义输出dll的名称
-set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Core")
+# 指定生成目标
+add_executable(${PROJECT_NAME} ${DIR_SRCS})
+
+
+# 添加 getopt_pp 子目录
+add_subdirectory(lib/getopt_pp)
+target_link_libraries( ${PROJECT_NAME} getopt_pp)
+
+

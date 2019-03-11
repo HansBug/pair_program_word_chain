@@ -8,3 +8,7 @@ $ cmake .. -G "MinGW Makefiles"
 
 $ make 或者 mingw32-make
 ```
+
+
+// 如果需要编译dll，使用`CMakeLst.txt.backup_for_dll`这个文件编译就好了。
+
