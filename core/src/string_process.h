@@ -9,9 +9,10 @@
 #include <vector>
 #include <string>
 
-// 字符串转小写
+// turn string to downcase
 std::string downcase(const std::string &string);
 
+// turn string to upcase
 std::string upcase(const std::string &string);
 
 // switch all the words to downcase words

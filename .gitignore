@@ -1,6 +1,7 @@
 # Hansbug's env
 /.idea
 /core/cmake-build-debug
+/core/src/main.cpp
 
 # yq's env
 build/

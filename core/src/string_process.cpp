@@ -2,17 +2,19 @@
 // Created by admin on 2019/3/11.
 //
 
-#include "utils.h"
+#include "string_process.h"
 #include <unordered_set>
 #include <unordered_map>
 #include <algorithm>
 
+// turn string to downcase
 std::string downcase(const std::string &string) {
     std::string result(string);
     std::transform(result.begin(), result.end(), result.begin(), ::tolower);
     return result;
 }
 
+// turn string to upcase
 std::string upcase(const std::string &string) {
     std::string result(string);
     std::transform(result.begin(), result.end(), result.begin(), ::toupper);
