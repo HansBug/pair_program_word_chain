@@ -1,0 +1,10 @@
+
+
+
+// 为了防止cmake污染工作文件夹，cmake操作在`wordlist-test/build`目录下执行
+
+```
+$ cmake .. -G "MinGW Makefiles"
+
+$ make 或者 mingw32-make
+```
