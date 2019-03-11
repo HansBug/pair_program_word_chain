@@ -1,4 +1,7 @@
+# Hansbug's env
+/.idea
+/core/cmake-build-debug
 
-
+# yq's env
 build/
 .vscode/
