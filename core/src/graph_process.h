@@ -8,148 +8,181 @@
 #include <climits>
 #include <vector>
 #include <cstring>
+#include <iostream>
 
-const int NO_EDGE = INT_MAX;
+#define NO_EDGE         (INT_MAX)
+#define NO_START_NODE   (0)
+
+#define NOT_VISITED (0)
+#define VISITED     (1)
+#define ALL_VISITED (2)
 
 template<int N>
 class Graph {
 private:
-    int **graph;
-    int **dist;
-    int **route;
+    struct Edge {
+        int u, v;
+        int weight;
+        Edge *next;
+    };
+    Edge **a;
+    int *visited;
 
-    // clear graph
-    void clear_graph() {
-        std::memset(graph, 0, sizeof(graph));
+    // clear data in visited array
+    void clear_visited() {
+        std::memset(visited, 0, sizeof(int) * (N + 1));
     }
 
-    // clear distance
-    void clear_dist() {
-        memset(dist, 0, sizeof(dist));
-        memset(route, 0, sizeof(route));
-    }
-
-    // initialize result
-    void init_dist() {
-        clear_dist();
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                if (i == j) {
-                    dist[i][j] = 0;
-                    route[i][j] = i;
-                } else if (graph[i][j] == NO_EDGE) {
-                    dist[i][j] = NO_EDGE;
-                    route[i][j] = 0;
-                } else {
-                    dist[i][j] = graph[i][j];
-                    route[i][j] = j;
-                }
+    // check is has circle in dfs
+    bool has_circle_dfs(int start) {
+        visited[start] = VISITED;
+        for (Edge *edge = a[start]; edge != nullptr; edge = edge->next) {
+            int next = edge->v;
+            int status = visited[next];
+            if (status == VISITED) {
+                return true;
+            } else if (status == ALL_VISITED) {
+                continue;
+            } else if (status == NOT_VISITED) {
+                bool has = has_circle_dfs(edge->v);
+                if (has) return true;
             }
         }
-    }
-
-    // check if range is valid
-    bool check_range(int index) {
-        return index >= 1 && index <= N;
+        visited[start] = ALL_VISITED;
+        return false;
     }
 
 public:
     // constructor
     Graph() {
-        graph = new int *[N + 1];
+        a = new Edge *[N + 1];
         for (int i = 0; i <= N; i++) {
-            graph[i] = new int[N + 1];
+            a[i] = nullptr;
+        }
+        visited = new int[N + 1];
+        clear_visited();
+    }
+
+    // destructor
+    ~Graph() {
+        for (int i = 0; i <= N; i++) {
+            Edge *edge = a[i];
+            while (edge != nullptr) {
+                Edge *next = edge->next;
+                delete edge;
+                edge = next;
+            }
+            a[i] = nullptr;
+        }
+        delete[] a;
+        delete[] visited;
+    }
+
+    // add a new edge into graph
+    void add_edge(int u, int v, int weight) {
+        Edge *edge = new Edge;
+        edge->u = u;
+        edge->v = v;
+        edge->weight = weight;
+        edge->next = a[u];
+        a[u] = edge;
+    }
+
+    // check if there is circle in graph
+    bool has_circle() {
+        clear_visited();
+        for (int i = 1; i <= N; i++) {
+            if (visited[i] == ALL_VISITED) continue;
+            bool has = has_circle_dfs(i);
+            if (has) return true;
+        }
+        return false;
+    }
+
+    std::vector<int> *get_longest_path() {
+        return get_longest_path(NO_START_NODE);
+    }
+
+    std::vector<int> *get_longest_path(int start_node) {
+        if (has_circle()) {
+            return nullptr;
         }
 
+        int **route;
+        route = new int *[N + 1];
+        for (int i = 0; i <= N; i++) {
+            route[i] = new int[N + 1];
+        }
+
+        int **dist;
         dist = new int *[N + 1];
         for (int i = 0; i <= N; i++) {
             dist[i] = new int[N + 1];
         }
 
-        route = new int *[N + 1];
-        for (int i = 0; i <= N; i++) {
-            route[i] = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                route[i][j] = 0;
+                if (i == j) {
+                    dist[i][j] = 0;
+                } else {
+                    dist[i][j] = NO_EDGE;
+                }
+            }
         }
-        clear();
-    }
-
-    // destructor
-    ~Graph() {
-        for (int i = 0; i < N + 1; i++) {
-            delete[] graph[i];
-            delete[] dist[i];
-            delete[] route[i];
+        for (int i = 1; i <= N; i++) {
+            for (Edge *edge = a[i]; edge != nullptr; edge = edge->next) {
+                int u = edge->u;
+                int v = edge->v;
+                if ((dist[u][v] == NO_EDGE) || (dist[u][v] < edge->weight)) {
+                    dist[u][v] = edge->weight;
+                    route[u][v] = v;
+                }
+            }
         }
-        delete[] graph;
-        delete[] dist;
-        delete[] route;
-    }
-
-    // clear all data
-    void clear() {
-        clear_graph();
-        clear_dist();
-    }
-
-    // set edge
-    bool set_edge_weight(int u, int v, int weight) {
-        if (!check_range(u) || !check_range(v)) return false;
-        graph[u][v] = weight;
-        return true;
-    }
-
-    // set undirected edge
-    bool set_undirected_edge_weight(int u, int v, int weight) {
-        if (!check_range(u) || !check_range(v)) return false;
-        set_edge_weight(u, v, weight);
-        set_edge_weight(v, u, weight);
-        return true;
-    }
-
-    // get edge's weight
-    int get_edge_weight(int u, int v) {
-        if (!check_range(u) || !check_range(v)) return NO_EDGE;
-        return graph[u][v];
-    }
-
-    // calculate shortest path with floyd algorithm
-    void floyd() {
-        init_dist();
         for (int k = 1; k <= N; k++) {
             for (int i = 1; i <= N; i++) {
                 if (dist[i][k] == NO_EDGE) continue;
                 for (int j = 1; j <= N; j++) {
                     if (dist[k][j] == NO_EDGE) continue;
-                    if ((dist[i][j] == NO_EDGE) || (dist[i][j] > dist[i][k] + dist[k][j])) {
+                    if ((dist[i][j] == NO_EDGE) || (dist[i][j] < dist[i][k] + dist[k][j])) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         route[i][j] = route[i][k];
                     }
                 }
             }
         }
-    }
 
-    // get distance from u to v
-    int get_distance(int source, int target) {
-        if (!check_range(source) || !check_range(target)) return NO_EDGE;
-        return dist[source][target];
-    }
-
-    // get full route from u to v
-    std::vector<int> get_route(int source, int target) {
-        std::vector<int> result{source};
-        int current = source;
-        while (current != target) {
-            int next = route[current][target];
-            if (next == 0) {
-                return std::vector<int>(); // no route found
-            } else {
-                result.insert(result.end(), next);
-                current = next;
+        int max_u = 0;
+        int max_v = 0;
+        int max_dist = NO_EDGE;
+        for (int i = 1; i <= N; i++) {
+            if ((start_node != NO_START_NODE) && (start_node != i)) continue;
+            for (int j = 1; j <= N; j++) {
+                if (dist[i][j] == NO_EDGE) continue;
+                if ((max_dist == NO_EDGE) || (dist[i][j] > max_dist)) {
+                    max_dist = dist[i][j];
+                    max_u = i;
+                    max_v = j;
+                }
             }
         }
-        return result;  // route found
+
+        if (max_dist != NO_EDGE) {
+            int u = max_u;
+            int v = max_v;
+            std::vector<int> list{u};
+            while (u != v) {
+                int next = route[u][v];
+                list.insert(list.end(), next);
+                u = next;
+            }
+            return new std::vector<int>(list);
+        } else {
+            return nullptr;
+        }
     }
 };
+
 
 #endif //CORE_GRAPH_PROCESS_H

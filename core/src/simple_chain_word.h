@@ -5,20 +5,16 @@
 #ifndef CORE_SIMPLE_CHAIN_WORD_H
 #define CORE_SIMPLE_CHAIN_WORD_H
 
-#include "string_process.h"
-#include "graph_process.h"
-#include <vector>
-#include <string>
+#include "simple_chain_model.h"
 
-class SimpleChainWordSolution {
-private:
-    std::vector<std::string> words;
+class SimpleChainWordModel : public SimpleChainModel {
+protected:
+    int get_word_weight(const std::string &string) override;
+
 public:
-    SimpleChainWordSolution() = default;
+    explicit SimpleChainWordModel(const std::vector<std::string> &strings) : SimpleChainModel(strings) {}
 
-    explicit SimpleChainWordSolution(const std::vector<std::string> &words) {
-        this->words = std::vector<std::string>(words);
-    }
+    SimpleChainWordModel(const std::initializer_list<std::string> &strings) : SimpleChainModel(strings) {}
 };
 
 #endif //CORE_SIMPLE_CHAIN_WORD_H
