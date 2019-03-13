@@ -3,18 +3,13 @@
 #define CORE_H_
 
 //############# Write Your Code below ###############
+#define NO_START_CHAR       (0)  // use this when start char is not necessary
+#define NO_END_CHAR         (0)  // use this when end char is not necessary
 
-
-
-
-
+#define NO_SOLUTION_FOUND   (-10)  // no solution found (only possible when both start and end char are limited
+#define NOT_IMPLEMENT       (-11)  // function not implement yet
 
 // Write your code here
-
-
-
-
-
 
 //############# Write Your Code above ###############
 
@@ -25,15 +20,15 @@ extern "C" {          // we need to export the C interface
 
 // Source: http://programmingexamples.wikidot.com/blog:1
 #ifdef NO_DLL
-   #define EXPORT  
+#define EXPORT
 #elif defined(DLL_EXPORTS)   // we define DLL_EXPORTS in core.cpp when we create DLL
-   #define EXPORT  __declspec(dllexport)   // export DLL information
+#define EXPORT  __declspec(dllexport)   // export DLL information
 #else                // we didn't define DLL_EXPORTS when we use this DLL
-   #define EXPORT  __declspec(dllimport)   // import DLL information
-#endif 
+#define EXPORT  __declspec(dllimport)   // import DLL information
+#endif
 
 
-EXPORT int TEST_LIB_PLUS(int a, int b);   
+EXPORT int TEST_LIB_PLUS(int a, int b);
 
 EXPORT int gen_chain_word(char *words[], int len, char *result[],
                           char head, char tail, bool enable_loop);
@@ -45,7 +40,6 @@ EXPORT int gen_chain_char(char *words[], int len, char *result[],
 #ifdef __cplusplus
 }
 #endif
-
 
 
 #endif // CORE_H_

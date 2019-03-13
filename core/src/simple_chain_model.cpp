@@ -5,18 +5,18 @@
 #include <sstream>
 #include "simple_chain_model.h"
 
-std::string SimpleChainModel::prefix_and_suffix(const char &prefix, const char &suffix) {
+std::string SimpleChainModel::prefix_and_suffix_to_key(const char &prefix, const char &suffix) {
     std::stringstream stream;
     stream << prefix << suffix;
     return stream.str();
 }
 
-std::string SimpleChainModel::prefix_and_suffix(const std::string &string) {
-    return prefix_and_suffix(string.at(0), string.at(string.length() - 1));
+std::string SimpleChainModel::prefix_and_suffix_to_key(const std::string &string) {
+    return prefix_and_suffix_to_key(string.at(0), string.at(string.length() - 1));
 }
 
 void SimpleChainModel::put_string(const std::string &string) {
-    std::string key = prefix_and_suffix(string);
+    std::string key = prefix_and_suffix_to_key(string);
     if (storage.find(key) != storage.end()) {
         std::string old_string = storage[key];
         if (string.length() > old_string.length()) {
@@ -28,7 +28,7 @@ void SimpleChainModel::put_string(const std::string &string) {
 }
 
 std::string *SimpleChainModel::get_string(const char &prefix, const char &suffix) {
-    std::string key = prefix_and_suffix(prefix, suffix);
+    std::string key = prefix_and_suffix_to_key(prefix, suffix);
     if (storage.find(key) != storage.end()) {
         return new std::string(storage[key]);
     } else {
@@ -55,7 +55,6 @@ void SimpleChainModel::init_model(const std::vector<std::string> &strings) {
             std::string *str = get_string(prefix, suffix);
             if (str != nullptr) {
                 int weight = get_word_weight(*str);
-                std::cout << i << ' ' << j << " " << weight << std::endl;
                 graph.add_edge(i, j, weight);
             }
         }
@@ -74,16 +73,28 @@ void SimpleChainModel::init() {
 }
 
 std::vector<std::string> *SimpleChainModel::get_longest_link() {
-    return get_longest_link(NO_START_CHAR);
+    return get_longest_link(NO_START_CHAR, NO_END_CHAR);
 }
 
-std::vector<std::string> *SimpleChainModel::get_longest_link(char start_with) {
-    std::vector<int> *link;
-    if (start_with == NO_START_CHAR) {
-        link = graph.get_longest_path();
-    } else {
-        link = graph.get_longest_path(char_to_index(start_with));
+std::vector<std::string> *SimpleChainModel::get_longest_link_start_with(char start_with) {
+    return get_longest_link(start_with, NO_END_CHAR);
+}
+
+std::vector<std::string> *SimpleChainModel::get_longest_link_end_with(char end_with) {
+    return get_longest_link(NO_START_CHAR, end_with);
+}
+
+std::vector<std::string> *SimpleChainModel::get_longest_link(char start_with, char end_with) {
+    int start_index = NO_START_NODE;
+    int end_index = NO_END_NODE;
+
+    if (start_with != NO_START_CHAR) {
+        start_index = char_to_index(start_with);
     }
+    if (end_with != NO_END_CHAR) {
+        end_index = char_to_index(end_with);
+    }
+    std::vector<int> *link = graph.get_longest_path(start_index, end_index);
 
     if (link == nullptr) {
         return nullptr;
@@ -102,4 +113,8 @@ std::vector<std::string> *SimpleChainModel::get_longest_link(char start_with) {
     }
 
     return new std::vector<std::string>(result);
+}
+
+bool SimpleChainModel::has_word_circle() {
+    return graph.has_circle();
 }

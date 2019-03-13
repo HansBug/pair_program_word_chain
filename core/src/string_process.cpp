@@ -6,12 +6,37 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <algorithm>
+#include <cstring>
+
+bool is_downcase(const char &ch) {
+    return ch >= 'a' && ch <= 'z';
+}
+
+char downcase(const char &ch) {
+    if (is_upcase(ch)) {
+        return ch - 'A' + 'a';
+    } else {
+        return ch;
+    }
+}
 
 // turn string to downcase
 std::string downcase(const std::string &string) {
     std::string result(string);
     std::transform(result.begin(), result.end(), result.begin(), ::tolower);
     return result;
+}
+
+bool is_upcase(const char &ch) {
+    return ch >= 'A' && ch <= 'Z';
+}
+
+char upcase(const char &ch) {
+    if (is_downcase(ch)) {
+        return ch - 'a' + 'A';
+    } else {
+        return ch;
+    }
 }
 
 // turn string to upcase
@@ -43,25 +68,24 @@ std::unordered_map<std::string, int> string_list_to_map(const std::vector<std::s
     return map;
 }
 
-// check if there are word circle(s)
-bool has_word_circle(const std::vector<std::string> &strings) {
-    std::unordered_set<char> head_chars;
-    std::unordered_set<char> tail_chars;
-    for (const std::string &string : strings) {
-        if (string.length() <= 0) {
-            continue;
-        }
-        char head = string.at(0);
-        head_chars.insert(head);
-
-        char tail = string.at(string.length() - 1);
-        tail_chars.insert(tail);
+// turn word array ptr to string vector
+std::vector<std::string> char_array_ptr_to_vector(char *words[], int len) {
+    std::vector<std::string> result;
+    result.reserve((unsigned int) len);
+    for (int i = 0; i < len; i++) {
+        result.emplace_back(std::string(words[i]));
     }
+    return result;
+}
 
-    for (const char &ch : head_chars) {
-        if (tail_chars.find(ch) != tail_chars.end()) {
-            return true;
-        }
+// turn string vector to char array ptr
+int vector_to_char_array_ptr(const std::vector<std::string> &words, char *result[]) {
+    auto len = words.size();
+    for (int i = 0; i < len; i++) {
+        std::string word = words[i];
+        auto word_length = word.length();
+        result[i] = new char[word_length + 1];
+        strcpy(result[i], word.c_str());
     }
-    return false;
+    return len;
 }

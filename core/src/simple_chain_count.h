@@ -9,11 +9,14 @@
 
 class SimpleChainCountModel : public SimpleChainModel {
 protected:
+    // word's weight
     int get_word_weight(const std::string &string) override;
 
 public:
+    // constructor
     explicit SimpleChainCountModel(const std::vector<std::string> &strings) : SimpleChainModel(strings) {}
 
+    // list constructor
     SimpleChainCountModel(const std::initializer_list<std::string> &strings) : SimpleChainModel(strings) {}
 };
 

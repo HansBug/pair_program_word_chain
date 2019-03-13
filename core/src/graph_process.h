@@ -12,6 +12,7 @@
 
 #define NO_EDGE         (INT_MAX)
 #define NO_START_NODE   (0)
+#define NO_END_NODE     (0)
 
 #define NOT_VISITED (0)
 #define VISITED     (1)
@@ -100,10 +101,18 @@ public:
     }
 
     std::vector<int> *get_longest_path() {
-        return get_longest_path(NO_START_NODE);
+        return get_longest_path(NO_START_NODE, NO_END_NODE);
     }
 
-    std::vector<int> *get_longest_path(int start_node) {
+    std::vector<int> *get_longest_path_with_start(int start_node) {
+        return get_longest_path(start_node, NO_END_NODE);
+    }
+
+    std::vector<int> *get_longest_path_with_end(int end_node) {
+        return get_longest_path(NO_START_NODE, end_node);
+    }
+
+    std::vector<int> *get_longest_path(int start_node, int end_node) {
         if (has_circle()) {
             return nullptr;
         }
@@ -159,6 +168,7 @@ public:
         for (int i = 1; i <= N; i++) {
             if ((start_node != NO_START_NODE) && (start_node != i)) continue;
             for (int j = 1; j <= N; j++) {
+                if ((end_node != NO_END_NODE) && (end_node != j)) continue;
                 if (dist[i][j] == NO_EDGE) continue;
                 if ((max_dist == NO_EDGE) || (dist[i][j] > max_dist)) {
                     max_dist = dist[i][j];
