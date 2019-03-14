@@ -5,37 +5,6 @@
 #include <sstream>
 #include "simple_chain_model.h"
 
-std::string SimpleChainModel::prefix_and_suffix_to_key(const char &prefix, const char &suffix) {
-    std::stringstream stream;
-    stream << prefix << suffix;
-    return stream.str();
-}
-
-std::string SimpleChainModel::prefix_and_suffix_to_key(const std::string &string) {
-    return prefix_and_suffix_to_key(string.at(0), string.at(string.length() - 1));
-}
-
-void SimpleChainModel::put_string(const std::string &string) {
-    std::string key = prefix_and_suffix_to_key(string);
-    if (storage.find(key) != storage.end()) {
-        std::string old_string = storage[key];
-        if (string.length() > old_string.length()) {
-            storage[key] = string;
-        }
-    } else {
-        storage[key] = string;
-    }
-}
-
-std::string *SimpleChainModel::get_string(const char &prefix, const char &suffix) {
-    std::string key = prefix_and_suffix_to_key(prefix, suffix);
-    if (storage.find(key) != storage.end()) {
-        return new std::string(storage[key]);
-    } else {
-        return nullptr;
-    }
-}
-
 int SimpleChainModel::char_to_index(const char &ch) {
     return ch - 'a' + 1;
 }
@@ -44,32 +13,44 @@ char SimpleChainModel::index_to_char(const int &index) {
     return (char) ('a' + index - 1);
 }
 
-void SimpleChainModel::init_model(const std::vector<std::string> &strings) {
-    for (const std::string &string : strings) {
-        put_string(string);
-    }
-    for (int i = 1; i <= MAX_ALPHA_INDEX; i++) {
-        for (int j = 1; j <= MAX_ALPHA_INDEX; j++) {
-            char prefix = index_to_char(i);
-            char suffix = index_to_char(j);
-            std::string *str = get_string(prefix, suffix);
-            if (str != nullptr) {
-                int weight = get_word_weight(*str);
-                graph.add_edge(i, j, weight);
-            }
-        }
-    }
+SimpleChainModel::SimpleChainModel(const std::vector<std::string> &words) {
+    this->words = std::vector<std::string>(words);
 }
 
-SimpleChainModel::SimpleChainModel(const std::vector<std::string> &strings) {
-    words.insert(words.end(), strings.begin(), strings.end());
-}
-
-SimpleChainModel::SimpleChainModel(const std::initializer_list<std::string> &strings)
-        : SimpleChainModel(std::vector<std::string>(strings)) {}
+SimpleChainModel::SimpleChainModel(const std::initializer_list<std::string> &words)
+        : SimpleChainModel(std::vector<std::string>(words)) {}
 
 void SimpleChainModel::init() {
-    init_model(words);
+    auto length = words.size();
+    std::unordered_map<char, std::vector<int>> prefix_sorted;
+    for (char c = 'a'; c <= 'z'; c++) {
+        prefix_sorted[c] = std::vector<int>();
+        graph.add_edge(SIMPLE_START_NODE, SIMPLE_ALPHA_START_NODE(char_to_index(c)), 0);
+        graph.add_edge(SIMPLE_ALPHA_END_NODE(char_to_index(c)), SIMPLE_END_NODE, 0);
+    }
+    for (int i = 0; i < length; i++) {
+        std::string word = words[i];
+        int word_index = i + 1;
+
+        char prefix = word.at(0);
+        prefix_sorted[prefix].emplace_back(i);
+        graph.add_edge(SIMPLE_ALPHA_START_NODE(char_to_index(prefix)), SIMPLE_WORD_NODE(word_index),
+                       get_word_weight(word));
+
+        char suffix = word.at(word.length() - 1);
+        graph.add_edge(SIMPLE_WORD_NODE(word_index), SIMPLE_ALPHA_END_NODE(char_to_index(suffix)), 0);
+    }
+    for (int i = 0; i < length; i++) {
+        int word_index_i = i + 1;
+        std::string word_i = words[i];
+        char suffix_i = word_i.at(word_i.length() - 1);
+        for (const int &j : prefix_sorted[suffix_i]) {
+            if (i == j) continue;
+            int word_index_j = j + 1;
+            std::string word_j = words[j];
+            graph.add_edge(SIMPLE_WORD_NODE(word_index_i), SIMPLE_WORD_NODE(word_index_j), get_word_weight(word_j));
+        }
+    }
 }
 
 std::vector<std::string> *SimpleChainModel::get_longest_link() {
@@ -85,34 +66,24 @@ std::vector<std::string> *SimpleChainModel::get_longest_link_end_with(char end_w
 }
 
 std::vector<std::string> *SimpleChainModel::get_longest_link(char start_with, char end_with) {
-    int start_index = NO_START_NODE;
-    int end_index = NO_END_NODE;
+    int start_node = (start_with == NO_START_CHAR) ? SIMPLE_START_NODE : SIMPLE_ALPHA_START_NODE(
+            char_to_index(start_with));
+    int end_node = (end_with == NO_END_CHAR) ? SIMPLE_END_NODE : SIMPLE_ALPHA_END_NODE(char_to_index(end_with));
 
-    if (start_with != NO_START_CHAR) {
-        start_index = char_to_index(start_with);
-    }
-    if (end_with != NO_END_CHAR) {
-        end_index = char_to_index(end_with);
-    }
-    std::vector<int> *link = graph.get_longest_path(start_index, end_index);
+    std::vector<int> *link = graph.get_longest_path(start_node, end_node);
 
     if (link == nullptr) {
         return nullptr;
+    } else {
+        auto *result = new std::vector<std::string>();
+        for (const int &node_index : *link) {
+            if (SIMPLE_IS_WORD_NODE(node_index)) {
+                int word_index = SIMPLE_TO_WORD_INDEX(node_index);
+                result->emplace_back(words[word_index - 1]);
+            }
+        }
+        return result;
     }
-
-    std::vector<std::string> result;
-    std::vector<int> list = *link;
-    auto length = list.size();
-    for (int i = 0; i + 1 < length; i++) {
-        int u = list[i];
-        int v = list[i + 1];
-        char prefix = index_to_char(u);
-        char suffix = index_to_char(v);
-        std::string *str = get_string(prefix, suffix);
-        result.insert(result.end(), *str);
-    }
-
-    return new std::vector<std::string>(result);
 }
 
 bool SimpleChainModel::has_word_circle() {

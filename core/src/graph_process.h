@@ -10,6 +10,10 @@
 #include <cstring>
 #include <iostream>
 #include <algorithm>
+#include <deque>
+#include <queue>
+#include <unordered_set>
+#include <unordered_map>
 
 #define NO_EDGE         (INT_MAX)
 #define NO_START_NODE   (0)
@@ -150,79 +154,49 @@ public:
             return nullptr;
         }
 
-        int **route;
-        route = new int *[N + 1];
-        for (int i = 0; i <= N; i++) {
-            route[i] = new int[N + 1];
-        }
+        std::unordered_set<int> visited;
+        std::unordered_map<int, int> dist;
+        std::unordered_map<int, int> route;
 
-        int **dist;
-        dist = new int *[N + 1];
-        for (int i = 0; i <= N; i++) {
-            dist[i] = new int[N + 1];
-        }
+        std::queue<int> queue;
+        queue.push(start_node);
+        dist[start_node] = 0;
+        route[start_node] = 0;
+        visited.insert(start_node);
 
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                route[i][j] = 0;
-                if (i == j) {
-                    dist[i][j] = 0;
-                } else {
-                    dist[i][j] = NO_EDGE;
-                }
-            }
-        }
-        for (int i = 1; i <= N; i++) {
-            for (Edge *edge = a[i]; edge != nullptr; edge = edge->next) {
+        while (!queue.empty()) {
+            int first = queue.front();
+            for (Edge *edge = a[first]; edge != nullptr; edge = edge->next) {
                 int u = edge->u;
                 int v = edge->v;
-                if ((dist[u][v] == NO_EDGE) || (dist[u][v] < edge->weight)) {
-                    dist[u][v] = edge->weight;
-                    route[u][v] = v;
-                }
-            }
-        }
-        for (int k = 1; k <= N; k++) {
-            for (int i = 1; i <= N; i++) {
-                if (dist[i][k] == NO_EDGE) continue;
-                for (int j = 1; j <= N; j++) {
-                    if (dist[k][j] == NO_EDGE) continue;
-                    if ((dist[i][j] == NO_EDGE) || (dist[i][j] < dist[i][k] + dist[k][j])) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                        route[i][j] = route[i][k];
+                if ((dist.find(v) == dist.end()) || (dist[v] < dist[u] + edge->weight)) {
+                    dist[v] = dist[u] + edge->weight;
+                    route[v] = u;
+                    if (visited.find(v) == visited.end()) {
+                        visited.insert(v);
+                        queue.push(v);
                     }
                 }
             }
+            queue.pop();
+            visited.erase(first);
         }
 
-        int max_u = 0;
-        int max_v = 0;
-        int max_dist = NO_EDGE;
-        for (int i = 1; i <= N; i++) {
-            if ((start_node != NO_START_NODE) && (start_node != i)) continue;
-            for (int j = 1; j <= N; j++) {
-                if ((end_node != NO_END_NODE) && (end_node != j)) continue;
-                if (dist[i][j] == NO_EDGE) continue;
-                if ((max_dist == NO_EDGE) || (dist[i][j] > max_dist)) {
-                    max_dist = dist[i][j];
-                    max_u = i;
-                    max_v = j;
-                }
-            }
-        }
-
-        if (max_dist != NO_EDGE) {
-            int u = max_u;
-            int v = max_v;
-            std::vector<int> list{u};
-            while (u != v) {
-                int next = route[u][v];
-                list.insert(list.end(), next);
-                u = next;
-            }
-            return new std::vector<int>(list);
-        } else {
+        if (dist.find(end_node) == dist.end()) {
             return nullptr;
+        } else {
+            std::vector<int> result{end_node};
+            int current = end_node;
+            while (current != start_node) {
+                if (route.find(current) == route.end()) {
+                    return nullptr;
+                }
+                int next = route[current];
+                result.emplace_back(next);
+                current = next;
+            }
+            std::reverse(result.begin(), result.end());
+            return new std::vector<int>(result);
         }
     }
 
