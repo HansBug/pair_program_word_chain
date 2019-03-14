@@ -45,7 +45,7 @@ void MainWindow::on_loadButton_clicked()
         return;
     }
     QTextStream in(&file);
-    String input = in.readAll();
+    QString input = in.readAll();
     if (input.isEmpty()) {
         QMessageBox::warning(this, "文件读取失败", "你选择的是空文件或者拒绝读取内容");
     }
@@ -78,7 +78,7 @@ void MainWindow::on_calcButton_clicked()
     
 
     calcThread->setFlags(flag_w, flag_c, flag_h, flag_t, flag_r);
-    calcThread->setWords(ui->inputTextEdit->toPlainText());
+    calcThread->setQStringWords(ui->inputTextEdit->toPlainText());
     calcThread->start();
 
     statusBarLabel->setText("正在计算... ...");

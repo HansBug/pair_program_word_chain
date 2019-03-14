@@ -14,7 +14,7 @@ public:
     // call this before calling start()
     void setFlags(bool flag_w, bool flag_c, char flag_h, char flag_t, bool flag_r);
     // call this before calling start()
-    void setWords(const QString &words);
+    void setQStringWords(const QString &words);
 
     // if Stop = true, the thread will break
     // out of the loop, and will be disposed
@@ -33,7 +33,7 @@ private:
     char flag_h;
     char flag_t;
     bool flag_r;
-    QString words;
+    QString str_words;
 };
 
 #endif // CALCTHREAD_H_
