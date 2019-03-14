@@ -9,7 +9,7 @@
 #define NO_SOLUTION_FOUND   (-10)  // no solution found (only possible when both start and end char are limited
 #define NOT_IMPLEMENT       (-11)  // function not implement yet
 
-
+// This is all the possible return value for exported dll function
 #define CORE_WORDS_HAS_CIRCLE        (-1)
 #define CORE_WORDS_HAS_EMPTY         (-2)
 #define CORE_WORDS_HAS_INVALID       (-3)

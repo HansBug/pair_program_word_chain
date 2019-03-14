@@ -28,7 +28,7 @@ typedef struct _Params {
 Params parseArguments(GetOpt::GetOpt_pp &ops) 
 {
     bool flag_w, flag_c;
-    char flag_h, flag_t;
+    char flag_h = '\0', flag_t = '\0';
     bool flag_r;
 
     //GetOpt::GetOpt_pp ops(argc, argv);
@@ -51,8 +51,8 @@ Params parseArguments(GetOpt::GetOpt_pp &ops)
     }
     ops >> GetOpt::OptionPresent('r', flag_r);
     if (DEBUG) {
-        printf("w:%d, c:%d, h:%d, t:%d, r:%d\n", 
-            flag_w, flag_c, flag_h, flag_t, flag_r);
+        printf("w:%d, c:%d, h:%c(ascii: %d), t:%c(ascii: %d), r:%d\n", 
+            flag_w, flag_c, flag_h, flag_h, flag_t, flag_t, flag_r);
     }
     return Params{flag_w, flag_c, flag_h, flag_t, flag_r};
 }
@@ -163,6 +163,8 @@ int main(int argc, char *argv[])
     if (!(ops >> GetOpt::GlobalOption(filename))) {
         std::cout << "Not providing input file, ";
         std::cout << "using default file: " << filename << std::endl;
+    } else {
+        std::cout << "using file: " << filename << std::endl;
     }
 
     // Step 2: read file in to words array
