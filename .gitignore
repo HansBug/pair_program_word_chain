@@ -7,3 +7,7 @@
 # yq's env
 build/
 .vscode/
+
+Debug/
+.vs/
+TestResults/
