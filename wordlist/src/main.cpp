@@ -8,9 +8,10 @@
 #include "../lib/getopt_pp/getopt_pp.h"
 #include "error.h"
 // Change this if necessary
-#include "../../core/core.h"    
+#include "../../core/src/core.h"    
 // For MSVC(VS2017)
 // #pragma (lib, "C:/Desktop/pair_program_word_chain/core/build/libCORE_LIB.dll")
+#define DEBUG true
 
 typedef struct _Params {
     bool flag_w, flag_c;
@@ -28,6 +29,11 @@ Params parseArguments(GetOpt::GetOpt_pp &ops)
     //GetOpt::GetOpt_pp ops(argc, argv);
     ops >> GetOpt::OptionPresent('w', flag_w);
     ops >> GetOpt::OptionPresent('c', flag_c);
+    if (!flag_w && !flag_c) {
+        error(ERR_MISSING_OPTION_W_C);
+    } else if (flag_w && flag_c) {
+        error(ERR_DUPLICATE_OPTION_W_C);
+    }
     if (ops >> GetOpt::OptionPresent('h')) {
         if (!(ops >> GetOpt::Option('h', flag_h))) {
             error(ERR_WRONG_FORMAT_OPTION_H);
@@ -69,7 +75,6 @@ void readWords(std::vector<std::string> &words, std::istream &input_stream)
     // read char by char
     while (input_stream >> std::noskipws >> ch) {
         if (std::isalpha(ch)) {
-            assert(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z');
             word << (char)std::tolower(ch);
             empty = false;
         } else if (!empty) {
@@ -110,7 +115,6 @@ int readWords2(char *words[], std::istream &input_stream)
     // read char by char
     while (input_stream >> std::noskipws >> ch) {
         if (std::isalpha(ch)) {
-            assert(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z');
             word << (char)std::tolower(ch);
             empty = false;
         } else if (!empty) {
@@ -142,7 +146,6 @@ int readWords2(char *words[], std::istream &input_stream)
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Good";
     std::string filename = "../input.txt";
     //std::vector<std::string> words;
     char* words[20000]; // 20000 * 4 bytes ≈ 80 MB 
@@ -168,17 +171,50 @@ int main(int argc, char *argv[])
     // Step 3: get parameters
     Params params = parseArguments(ops);
 
-    std::cout << "Pre-processed words: " << words_count << std::endl;;
-    for (int i = 0; i < words_count; i++) {
-        std::cout << words[i] << " ";
+    if (DEBUG) {
+        std::cout << "Pre-processed words: " << words_count << std::endl;;
+        for (int i = 0; i < words_count; i++) {
+            std::cout << words[i] << " ";
+        }
+        std::cout << std::endl << std::endl;
     }
-    std::cout << std::endl << std::endl;
 
     char* result[10000];
-    int result_count = gen_chain_word(words, words_count, result, '\0', '\0', false);
 
+    int result_count;  // result is words count if success, else error code.
+    assert( params.flag_c ^ params.flag_w );
+    if (params.flag_c) {
+        result_count = gen_chain_char(words, words_count, result, params.flag_h, params.flag_t, params.flag_r);
+    } else { // params.flag_w
+        result_count = gen_chain_word(words, words_count, result, params.flag_h, params.flag_t, params.flag_r);
+    }
 
-    std::cout << "Calculated result: " << result_count << std::endl;
+    // check if success
+    if (result_count <= 0) {
+        switch (result_count)
+        {
+            case CORE_WORDS_HAS_CIRCLE:
+                error(ERR_UNEXPECTED_CIRCLE_IN_WORDS);
+                break;
+            case CORE_NO_WORD_CHAIN:
+                error(ERR_NO_WORD_CHAIN);
+                break;
+            case CORE_NO_MATCHED_WORD_CHAIN:
+                error(ERR_NO_MATCHED_WORD_CHAIN);
+                break;
+            case CORE_WORDS_HAS_EMPTY:
+                error(ERR_NO_VALID_WORDS);
+                break;
+            case CORE_WORDS_HAS_INVALID:
+                error("unexpected: words have invalid character");
+                break;
+            default:
+                std::cout << "unknown code:" << result_count << std::endl;
+                error("unexpected: unknown code");
+                break;
+        }
+    }
+
     for (int i = 0; i < result_count; i++) {
         std::cout << result[i] << " ";
     }
