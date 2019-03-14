@@ -39,16 +39,35 @@ Params parseArguments(GetOpt::GetOpt_pp &ops)
     } else if (flag_w && flag_c) {
         error(ERR_DUPLICATE_OPTION_W_C);
     }
-    if (ops >> GetOpt::OptionPresent('h')) {
-        if (!(ops >> GetOpt::Option('h', flag_h))) {
-            error(ERR_WRONG_FORMAT_OPTION_H);
+
+    // Using exceptions
+    std::string temp;
+    ops.exceptions(std::ios::failbit);
+    try {
+        if (ops >> GetOpt::Option('h', temp)) {
+            if (temp.size() != 1) {
+                error(ERR_WRONG_FORMAT_OPTION_H);
+            } else {
+                flag_h = temp[0];
+            }
         }
+    } catch (GetOpt::GetOptEx ex) {
+        error(ERR_WRONG_FORMAT_OPTION_H);
     }
-    if (ops >> GetOpt::OptionPresent('t')) {
-        if (!(ops >> GetOpt::Option('t', flag_t))) {
-            error(ERR_WRONG_FORMAT_OPTION_T);
+
+    try {
+        if (ops >> GetOpt::Option('t', temp)) {
+            if (temp.size() != 1) {
+                error(ERR_WRONG_FORMAT_OPTION_T);
+            } else {
+                flag_t = temp[0];
+            } 
         }
+    } catch (GetOpt::GetOptEx ex) {
+        error(ERR_WRONG_FORMAT_OPTION_T);
     }
+
+
     ops >> GetOpt::OptionPresent('r', flag_r);
     if (DEBUG) {
         printf("w:%d, c:%d, h:%c(ascii: %d), t:%c(ascii: %d), r:%d\n", 
@@ -159,7 +178,10 @@ int main(int argc, char *argv[])
     int words_count;
     GetOpt::GetOpt_pp ops(argc, argv);
 
-    // Step 1: get filename
+    // Step 1: get parameters
+    Params params = parseArguments(ops);
+
+    // Step 2: get filename
     if (!(ops >> GetOpt::GlobalOption(filename))) {
         std::cout << "Not providing input file, ";
         std::cout << "using default file: " << filename << std::endl;
@@ -167,7 +189,7 @@ int main(int argc, char *argv[])
         std::cout << "using file: " << filename << std::endl;
     }
 
-    // Step 2: read file in to words array
+    // Step 3: read file in to words array
     char ch;
     std::ifstream fin(filename, std::fstream::in);
     if (!fin.is_open()) {
@@ -176,9 +198,6 @@ int main(int argc, char *argv[])
     }
     words_count = readWords2(words, fin);
     fin.close();
-
-    // Step 3: get parameters
-    Params params = parseArguments(ops);
 
     if (DEBUG) {
         std::cout << "Pre-processed words: " << words_count << std::endl;;
@@ -224,9 +243,18 @@ int main(int argc, char *argv[])
         }
     }
 
+    
     for (int i = 0; i < result_count; i++) {
         std::cout << result[i] << " ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
+
+    // Write result to solutions.txt
+    std::ofstream out("solution.txt");
+    for (int i = 0; i < result_count; i++) {
+        out << result[i] << std::endl;
+    }
+    std::cout << "result is stored into solution.txt";
+    out.close();
     return 0;    
 }
