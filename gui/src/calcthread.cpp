@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <unordered_set>
 #include <sstream>
+#include <iostream>
+#include <cstdio>
 #include "../core/src/core.h" // change this is necessary 
 
 #define MAX_WORDS_NUM 10001
@@ -95,35 +97,44 @@ void CalcThread::run()
         return;
     }
 
+    std::cout << "words count: " << words_count << std::endl;
+    std::cout << "good";
 
     // Step 2: calling functions in
     char* result[MAX_WORDS_NUM];
     int result_count;  // result is words count if success, else error code.
-    assert(flag_c ^ flag_w );
+    if (!(flag_c ^ flag_w)) {
+        std::cout << "impossible";
+    }
+    
+    printf("w:%d, c:%d, h:%c(ascii: %d), t:%c(ascii: %d), r:%d\n", 
+        flag_w, flag_c, flag_h, flag_h, flag_t, flag_t, flag_r);
     if (flag_c) {
         result_count = gen_chain_char(words, words_count, result, flag_h, flag_t, flag_r);
     } else { // params.flag_w
         result_count = gen_chain_word(words, words_count, result, flag_h, flag_t, flag_r);
     }
 
+    std::cout << "good";
+
     // Step 3: check errors
     if (result_count <= 0) {
         switch (result_count)
         {
             case CORE_WORDS_HAS_CIRCLE:
-                emit calcFinished("error: unexpected circle in words");
+                emit calcFinished(QString("error: unexpected circle in words"));
                 return;
             case CORE_NO_WORD_CHAIN:
-                emit calcFinished("error: can't find a word chain");
+                emit calcFinished(QString("error: can't find a word chain"));
                 return;
             case CORE_NO_MATCHED_WORD_CHAIN:
-                emit calcFinished("error: can't find a word chain that matches the given head or tail character");
+                emit calcFinished(QString("error: can't find a word chain that matches the given head or tail character"));
                 return;
             case CORE_WORDS_HAS_EMPTY:
-                emit calcFinished("error: no valid english words");
+                emit calcFinished(QString("error: no valid english words"));
                 return;
             case CORE_WORDS_HAS_INVALID:
-                emit calcFinished("unexpected error: words have invalid character");
+                emit calcFinished(QString("unexpected error: words have invalid character"));
                 return;
             default:
                 emit calcFinished(QString("unexpected error: unknown code ") + QString::number(result_count));
@@ -131,12 +142,16 @@ void CalcThread::run()
         }
     }
 
+    std::cout << "good";
+
     // Step 4: convert char* word[] to QString
     QString res;
     for (int i = 0; i < result_count; i++) {
         res.append(result[i]);
         res.append('\n');
     }
+
+    std::cout << "good";
 
     // Step 5: return the result
     emit calcFinished(res);

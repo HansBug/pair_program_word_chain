@@ -62,8 +62,14 @@ void MainWindow::on_calcButton_clicked()
     // here is all the parameters
     bool flag_w = ui->flag_w->isChecked();
     bool flag_c = ui->flag_c->isChecked();
-    char flag_h = ui->flag_h->currentIndex() - 1 + 'A';
-    char flag_t = ui->flag_t->currentIndex() - 1 + 'A';
+    char flag_h = ui->flag_h->currentIndex();
+    if (flag_h != 0) {
+        flag_h = flag_h - 1 + 'a';
+    }
+    char flag_t = ui->flag_t->currentIndex();
+    if (flag_t != 0) {
+        flag_t = flag_t - 1 + 'a';
+    }
     bool flag_r = ui->flag_r->isChecked();
 
     // Maybe you can comment below codes
@@ -72,10 +78,11 @@ void MainWindow::on_calcButton_clicked()
         << "flag_w:" << flag_w << " flag_c:" << flag_c 
         << " flag_h:" << flag_h << " flag_t:" << flag_t
         << " flag_r:" << flag_r << std::endl << std::endl
-        << "点击Ok开始计算";
-    QString str = QString::fromStdString(ss.str());
-    QMessageBox::information(this, "参数确认", str);
-    
+        << "点击 Yes 开始计算";
+    if (QMessageBox::question(this, "参数确认？", QString::fromStdString(ss.str()),
+            QMessageBox::Yes|QMessageBox::Cancel) != QMessageBox::Yes) {
+        return;
+    }
 
     calcThread->setFlags(flag_w, flag_c, flag_h, flag_t, flag_r);
     calcThread->setQStringWords(ui->inputTextEdit->toPlainText());
@@ -95,7 +102,7 @@ void MainWindow::on_clearButton_clicked()
 void MainWindow::on_saveButton_clicked()
 {
     QString filename = QFileDialog::getSaveFileName(this, 
-        NULL,  "result.txt", "Text files (*.txt)");
+        NULL,  "solution.txt", "Text files (*.txt)");
     if (filename.isEmpty()) {
         // User cancelled selecting file
         return;

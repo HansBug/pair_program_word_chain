@@ -313,6 +313,31 @@ tyrogue vigoroth vulpix wailord wartortle whismur wingull yamask</string>
         </item>
         <item>
          <property name="text">
+          <string>R</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>T</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>U</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>V</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>W</string>
          </property>
         </item>
@@ -463,6 +488,31 @@ tyrogue vigoroth vulpix wailord wartortle whismur wingull yamask</string>
         <item>
          <property name="text">
           <string>Q</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>R</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>T</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>U</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>V</string>
          </property>
         </item>
         <item>
