@@ -172,7 +172,7 @@ int readWords2(char *words[], std::istream &input_stream)
 
 int main(int argc, char *argv[])
 {
-    std::string filename = "../input.txt";
+    std::string filename = "input.txt";
     //std::vector<std::string> words;
     char* words[MAX_WORD_NUM];
     int words_count;
