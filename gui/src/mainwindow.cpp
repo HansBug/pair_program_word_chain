@@ -45,7 +45,11 @@ void MainWindow::on_loadButton_clicked()
         return;
     }
     QTextStream in(&file);
-    ui->inputTextEdit->setPlainText(in.readAll());
+    String input = in.readAll();
+    if (input.isEmpty()) {
+        QMessageBox::warning(this, "文件读取失败", "你选择的是空文件或者拒绝读取内容");
+    }
+    ui->inputTextEdit->setPlainText(input);
 }
 
 void MainWindow::on_calcButton_clicked()
