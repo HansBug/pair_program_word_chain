@@ -15,6 +15,24 @@
 #define NO_START_CHAR   (0)
 #define NO_END_CHAR     (0)
 
+#define ALPHA_COUNT             (26)
+
+#define START_NODE              (1)
+#define FIRST_ALPHA_START_NODE  (START_NODE + 1)
+#define ALPHA_START_NODE(INDEX) (FIRST_ALPHA_START_NODE + INDEX - 1)
+#define LAST_ALPHA_START_NODE   (ALPHA_START_NODE(ALPHA_COUNT))
+
+#define END_NODE                (LAST_ALPHA_START_NODE + 1)
+#define FIRST_ALPHA_END_NODE    (END_NODE + 1)
+#define ALPHA_END_NODE(INDEX)   (FIRST_ALPHA_END_NODE + INDEX - 1)
+#define LAST_ALPHA_END_NODE     (ALPHA_END_NODE(ALPHA_COUNT))
+
+#define MAX_WORD_COUNT          (10010)
+#define FIRST_WORD_NODE         (LAST_ALPHA_END_NODE + 1)
+#define WORD_NODE(INDEX)        (FIRST_WORD_NODE + INDEX - 1)
+#define MAX_WORD_NODE           (WORD_NODE(MAX_WORD_COUNT))
+#define MAX_NODE_COUNT          (MAX_WORD_NODE)
+
 class SimpleChainModel {
 private:
     std::vector<std::string> words;
