@@ -7,11 +7,16 @@
 #include <cstring>      // strcpy
 #include "../lib/getopt_pp/getopt_pp.h"
 #include "error.h"
-// Change this if necessary
-#include "../../core/src/core.h"    
+#include "../../core/src/core.h"     // Change this if necessary
 // For MSVC(VS2017)
 // #pragma (lib, "C:/Desktop/pair_program_word_chain/core/build/libCORE_LIB.dll")
+
+#define MAX_WORD_NUM 20001
+
+// Set it to false in release version
 #define DEBUG true
+
+
 
 typedef struct _Params {
     bool flag_w, flag_c;
@@ -45,12 +50,11 @@ Params parseArguments(GetOpt::GetOpt_pp &ops)
         }
     }
     ops >> GetOpt::OptionPresent('r', flag_r);
-    /*
-    printf("w:%d, c:%d, h:%d, t:%d, r:%d\n", 
-        flag_w, flag_c, flag_h, flag_t, flag_r);
-    printf("filename: %s\n", filename.c_str());
-    */
-   return Params{flag_w, flag_c, flag_h, flag_t, flag_r};
+    if (DEBUG) {
+        printf("w:%d, c:%d, h:%d, t:%d, r:%d\n", 
+            flag_w, flag_c, flag_h, flag_t, flag_r);
+    }
+    return Params{flag_w, flag_c, flag_h, flag_t, flag_r};
 }
 
 
@@ -138,6 +142,9 @@ int readWords2(char *words[], std::istream &input_stream)
         char * w = new char [word.length()+1];
         strcpy(w, word.c_str());
         assert(*(w + word.length()) == '\0');
+        if (count >= MAX_WORD_NUM) {
+            error(ERR_WORDS_NUM_EXCEEDED);
+        }
         words[count++] = w;
     }
     
@@ -148,7 +155,7 @@ int main(int argc, char *argv[])
 {
     std::string filename = "../input.txt";
     //std::vector<std::string> words;
-    char* words[20000]; // 20000 * 4 bytes ≈ 80 MB 
+    char* words[MAX_WORD_NUM];
     int words_count;
     GetOpt::GetOpt_pp ops(argc, argv);
 
@@ -179,7 +186,7 @@ int main(int argc, char *argv[])
         std::cout << std::endl << std::endl;
     }
 
-    char* result[10000];
+    char* result[MAX_WORD_NUM];
 
     int result_count;  // result is words count if success, else error code.
     assert( params.flag_c ^ params.flag_w );

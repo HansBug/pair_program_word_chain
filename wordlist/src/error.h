@@ -11,6 +11,7 @@
 #define ERR_UNEXPECTED_CIRCLE_IN_WORDS "given words have unexpected circle"
 #define ERR_NO_WORD_CHAIN           "can't find a word chain"
 #define ERR_NO_MATCHED_WORD_CHAIN     "no word chain matches given head or tail character"
+#define ERR_WORDS_NUM_EXCEEDED   "number of words exceeded"
 
 void error(const char *msg);
 
