@@ -7,6 +7,8 @@
 
 #include "simple_chain_word.h"
 #include "simple_chain_count.h"
+#include "word_chain_word.h"
+#include "word_chain_count.h"
 
 #define SUCCESS                 (0)
 #define WORDS_HAS_CIRCLE        (-1)
@@ -27,5 +29,11 @@ int get_chain_with_word(const std::vector<std::string> &words, std::vector<std::
 // get longest word chain with word length
 int get_chain_with_char(const std::vector<std::string> &words, std::vector<std::string> *&link,
                         const char &start_with, const char &end_with);
+
+int get_chain_with_word_allow_same(const std::vector<std::string> &words, std::vector<std::string> *&link,
+                                   const char &start_with, const char &end_with);
+
+int get_chain_with_char_allow_same(const std::vector<std::string> &words, std::vector<std::string> *&link,
+                                   const char &start_with, const char &end_with);
 
 #endif //CORE_FUNCTIONS_H

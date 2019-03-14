@@ -15,16 +15,19 @@ int main() {
             "hij",
             "hik",
             "kjy",
+            "kja",
+            "ajy",
     };
+
     char *s[100];
     auto length = vector_to_char_array_ptr(words, s);
 
     char *res[100];
-    int ret = gen_chain_char(s, length, res, NO_START_CHAR, NO_END_CHAR, false);
+    int ret = gen_chain_word(s, length, res, 'f', 'e', true);
 
     if (ret >= 0) {
         auto result_length = (unsigned) ret;
-        std::vector<std::string> list = char_array_ptr_to_vector(s, result_length);
+        std::vector<std::string> list = char_array_ptr_to_vector(res, result_length);
         for (const std::string &word : list) {
             std::cout << word << " ---> ";
         }
@@ -32,4 +35,5 @@ int main() {
         std::cout << "error : " << ret << std::endl;
     }
     return 0;
+
 }

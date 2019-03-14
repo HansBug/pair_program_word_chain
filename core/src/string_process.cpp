@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 
 bool is_downcase(const char &ch) {
     return ch >= 'a' && ch <= 'z';
@@ -73,7 +74,8 @@ std::vector<std::string> char_array_ptr_to_vector(char *words[], int len) {
     std::vector<std::string> result;
     result.reserve((unsigned int) len);
     for (int i = 0; i < len; i++) {
-        result.emplace_back(std::string(words[i]));
+        std::string word = std::string(words[i]);
+        result.emplace_back(word);
     }
     return result;
 }

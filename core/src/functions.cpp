@@ -75,3 +75,35 @@ int get_chain_with_char(const std::vector<std::string> &words, std::vector<std::
         return WORDS_LINK_NOT_FOUND;
     }
 }
+
+int get_chain_with_word_allow_same(const std::vector<std::string> &words, std::vector<std::string> *&link,
+                                   const char &start_with, const char &end_with) {
+    int ret = words_precheck(words);
+    if (ret) {
+        return ret;
+    }
+    auto model = WordChainCountModel(words);
+    model.init();
+    link = model.get_longest_chain(start_with, end_with);
+    if (link != nullptr) {
+        return SUCCESS;
+    } else {
+        return WORDS_LINK_NOT_FOUND;
+    }
+}
+
+int get_chain_with_char_allow_same(const std::vector<std::string> &words, std::vector<std::string> *&link,
+                                   const char &start_with, const char &end_with) {
+    int ret = words_precheck(words);
+    if (ret) {
+        return ret;
+    }
+    auto model = WordChainWordModel(words);
+    model.init();
+    link = model.get_longest_chain(start_with, end_with);
+    if (link != nullptr) {
+        return SUCCESS;
+    } else {
+        return WORDS_LINK_NOT_FOUND;
+    }
+}

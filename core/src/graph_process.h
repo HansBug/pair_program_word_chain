@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+#include <algorithm>
 
 #define NO_EDGE         (INT_MAX)
 #define NO_START_NODE   (0)
@@ -28,6 +29,8 @@ private:
     };
     Edge **a;
     int *visited;
+//    std::vector<int> route;
+//    std::vector<int> best_route;
 
     // clear data in visited array
     void clear_visited() {
@@ -51,6 +54,36 @@ private:
         }
         visited[start] = ALL_VISITED;
         return false;
+    }
+
+    // dfs unique
+    std::pair<int, std::vector<int> *> dfs_unique(int start_node, int end_node) {
+        if (start_node == end_node) {
+            std::vector<int> route{end_node};
+            auto *route_ptr = new std::vector<int>(route);
+            return std::make_pair(0, route_ptr);
+        }
+
+        visited[start_node] = VISITED;
+        int result = NO_EDGE;
+        std::vector<int> *result_route = nullptr;
+        for (Edge *edge = a[start_node]; edge != nullptr; edge = edge->next) {
+            int u = edge->u;
+            int v = edge->v;
+            int weight = edge->weight;
+            if (visited[v] == VISITED) continue;
+            std::pair<int, std::vector<int> *> next_return = dfs_unique(v, end_node);
+            int next_result = next_return.first;
+            std::vector<int> *next_route = next_return.second;
+            if (next_result == NO_EDGE) continue;
+            if ((result == NO_EDGE) || (result < next_result + weight)) {
+                result = next_result + weight;
+                result_route = new std::vector<int>(*next_route);
+                result_route->emplace_back(u);
+            }
+        }
+        visited[start_node] = NOT_VISITED;
+        return std::make_pair(result, result_route);
     }
 
 public:
@@ -190,6 +223,19 @@ public:
             return new std::vector<int>(list);
         } else {
             return nullptr;
+        }
+    }
+
+    std::vector<int> *search_longest_unique_path(int start_node, int end_node) {
+        std::pair<int, std::vector<int> *> result = dfs_unique(start_node, end_node);
+        int ret = result.first;
+        if (ret == NO_EDGE) {
+            return nullptr;
+        } else {
+            std::vector<int> *raw_route = result.second;
+            std::vector<int> route = *raw_route;
+            std::reverse(route.begin(), route.end());
+            return new std::vector<int>(route);
         }
     }
 };
